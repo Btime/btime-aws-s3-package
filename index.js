@@ -1,6 +1,6 @@
 'use strict'
 
-module.exports = function AwsS3Package (options) {
+module.exports = function BtimeAwsS3Package (options) {
   const Joi = require('joi')
   const _pick = require('lodash').pick
   const S3UrlExists = require('s3-url-exists')
@@ -19,12 +19,12 @@ module.exports = function AwsS3Package (options) {
   ]
 
   const upload = function (params) {
-    const isValid = validate(params)
-    if (!isValid) {
+    const isValid = validateUpload(params)
+    if (isValid.error) {
       return Promise.reject(isValid.error)
     }
     return new Promise((resolve, reject) => {
-      const payload = getS3Payload(params)
+      const payload = defineS3Payload(params)
       AWS_S3.upload(payload, (err, data) => {
         if (err) {
           return reject(err)
@@ -34,29 +34,13 @@ module.exports = function AwsS3Package (options) {
     })
   }
 
-  const deleteObject = function (params) {
-    const isValid = validate(params)
-    if (!isValid) {
-      return Promise.reject(isValid.error)
-    }
-    return new Promise((resolve, reject) => {
-      const payload = getS3Payload(params)
-      AWS_S3.deleteObject(payload, (err, data) => {
-        if (err) {
-          return reject(err)
-        }
-        return resolve(data)
-      })
-    })
-  }
-
   const select = function (params) {
-    const isValid = validate(params)
-    if (!isValid) {
+    const isValid = validateKey(params)
+    if (isValid.error) {
       return Promise.reject(isValid.error)
     }
     return new Promise((resolve, reject) => {
-      const payload = getS3UrlExistsPayload(params)
+      const payload = defineS3UrlExistsPayload(params)
       return S3UrlExists(payload)
         .then(result => {
           resolve(result)
@@ -67,7 +51,23 @@ module.exports = function AwsS3Package (options) {
     })
   }
 
-  function getS3Payload (params) {
+  const deleteObject = function (params) {
+    const isValid = validateKey(params)
+    if (isValid.error) {
+      return Promise.reject(isValid.error)
+    }
+    return new Promise((resolve, reject) => {
+      const payload = defineS3Payload(params)
+      AWS_S3.deleteObject(payload, (err, data) => {
+        if (err) {
+          return reject(err)
+        }
+        return resolve({ Key: payload.Key })
+      })
+    })
+  }
+
+  function defineS3Payload (params) {
     const payload = {
       Bucket: options.S3_BUCKET,
       Key: generateKey(params.key)
@@ -86,22 +86,22 @@ module.exports = function AwsS3Package (options) {
     return optionalKey || Math.random().toString(36).substr(2, 9)
   }
 
-  function getS3UrlExistsPayload (params) {
+  function defineS3UrlExistsPayload (params) {
     return {
       key: params.key,
       bucket: options.S3_BUCKET,
-      refion: options.S3_REGION
+      region: options.S3_REGION
     }
   }
 
-  function validate (params) {
+  function validateUpload (params) {
     const Schema = {
       key: Joi.string()
         .optional()
         .description('the key of object to create into AWS S3'),
 
       file: Joi.binary()
-        .optional()
+        .required()
         .description('the buffer of object to create into AWS S3'),
 
       fileExtension: Joi.string()
@@ -112,10 +112,18 @@ module.exports = function AwsS3Package (options) {
         .optional()
         .description('the contentType of object to create into AWS S3')
     }
-
     return Joi.validate(
       _pick(params, PICK_FIELDS), Schema, { abortEarly: false }
     )
+  }
+
+  function validateKey (params) {
+    const Schema = {
+      key: Joi.string()
+        .required()
+        .description('the key of object to delete/select into AWS S3')
+    }
+    return Joi.validate(_pick(params, PICK_FIELDS), Schema)
   }
 
   return {

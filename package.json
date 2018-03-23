@@ -1,10 +1,12 @@
 {
-  "name": "btime-aws-s3-package",
+  "name": "aws-s3",
   "version": "1.0.0",
-  "description": "Btime Aws S3 Package",
+  "description": "Aws S3 Package",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "mocha",
+    "coverage": "nyc --reporter=html mocha",
+    "prepush": "npm test"
   },
   "repository": {
     "type": "git",
@@ -17,21 +19,30 @@
     "package",
     "lib"
   ],
-  "author": "mundodehads",
+  "author": "mundodehads <omundodehads@gmail.com",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/Btime/btime-aws-s3-package/issues"
   },
   "homepage": "https://github.com/Btime/btime-aws-s3-package#readme",
   "dependencies": {
-    "aws-sdk": "^2.212.1"
+    "aws-sdk": "^2.212.1",
+    "joi": "^13.1.2",
+    "lodash": "^4.17.5",
+    "s3-url-exists": "^1.0.3"
   },
   "devDependencies": {
+    "chai": "^4.1.2",
+    "dotenv": "^5.0.1",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-mocha": "^4.12.1",
     "eslint-plugin-node": "^6.0.1",
     "eslint-plugin-promise": "^3.7.0",
-    "eslint-plugin-standard": "^3.0.1"
+    "eslint-plugin-standard": "^3.0.1",
+    "husky": "^0.14.3",
+    "mocha": "^5.0.4",
+    "nyc": "^11.6.0"
   }
 }
