@@ -1,4 +1,4 @@
-# AWS S3 Package
+# Btime AWS S3 Package
 
 ![coverage](https://img.shields.io/badge/coverage-94.12%25-yellow.svg) ![node](https://img.shields.io/badge/node-v8.9.0-brightgreen.svg) ![npm](https://img.shields.io/badge/npm-v5.6.0-blue.svg)
 
@@ -9,7 +9,7 @@ This package is an abstraction of the **AWS S3** `upload, select` and `deleteObj
 ## Install with npm
 
 ```bash
-npm install aws-s3 --save
+npm install @btime/aws-s3 --save
 ```
 
 ## Usage
@@ -23,7 +23,7 @@ const options = {
   S3_KEY_ID: 's3-key-id-here',
   S3_BUCKET: 's3-bucket-here'
 }
-const S3 = require('aws-s3')(options)
+const S3 = require('@btime/aws-s3')(options)
 ```
 
 **Note:** this is an example, we **recomend** you get options using `dotenv`, an example can be find in our Testing section.
