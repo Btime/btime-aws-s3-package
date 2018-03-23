@@ -6,6 +6,12 @@
 
 This package is an abstraction of the **AWS S3** `upload, select` and `deleteObject` actions.
 
+## Install with npm
+
+```bash
+npm install aws-s3 --save
+```
+
 ## Usage
 
 When requiring `aws-s3` package, you **must** have your `aws s3 credentials` to use as parameter like example below:
