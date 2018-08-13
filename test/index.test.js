@@ -12,15 +12,17 @@ const MockSelect = require('./mocks/select')
 const MockDelete = require('./mocks/delete')
 
 describe('Aws S3 Package Tests', () => {
-  describe('Upload test:', () => {
+  describe('Upload test', () => {
     it('Expect upload an image', () => {
-      const payload = MockUpload.payload
+      const payload = MockUpload.imageWithContentType
+      const expectedKey = `${payload.key}${payload.fileExtension}`
+
       S3.upload(payload)
         .then(response => {
           expect(typeof response).to.equal('object')
           expect(typeof response.ETag).to.equal('string')
           expect(typeof response.Key).to.equal('string')
-          expect(response.Key).to.equal(payload.key)
+          expect(response.Key).to.equal(expectedKey)
           expect(typeof response.Bucket).to.equal('string')
           expect(response.Bucket).to.equal(MockOptions.S3_BUCKET)
           expect(typeof response.Location).to.equal('string')
@@ -36,9 +38,11 @@ describe('Aws S3 Package Tests', () => {
               expect(result.status).to.equal(true)
               expect(typeof result.url).to.equal('string')
               expect(result.url.length).to.be.greaterThan(0)
+              Promise.resolve(null)
             })
             .catch(err => {
               expect(err).to.equal(undefined)
+              Promise.resolve(null)
             })
         })
         .catch(err => {
@@ -46,9 +50,9 @@ describe('Aws S3 Package Tests', () => {
         })
     })
 
-    it('Expect upload an xlsx', () => {
-      const payload = MockUpload.xlsx
-      S3.upload(payload)
+    it('Expect upload an xlsx', async () => {
+      const payload = MockUpload.documentWithContentType
+      await S3.upload(payload)
         .then(response => {
           expect(typeof response).to.equal('object')
           expect(typeof response.ETag).to.equal('string')
@@ -103,6 +107,7 @@ describe('Aws S3 Package Tests', () => {
           expect(response.url.length).to.be.greaterThan(0)
         })
         .catch(err => {
+          console.log('\n\n\n err', err, '\n\n\n')
           expect(err).to.equal(undefined)
         })
     })

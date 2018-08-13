@@ -1,4 +1,4 @@
-const KEY = 'mochatest157'
+const KEY = 'mochatest157.png'
 
 module.exports = {
   payload: {
