@@ -95,7 +95,7 @@ describe('Aws S3 Package Tests', () => {
     })
   })
 
-  describe('Select test:', () => {
+  describe('Select test', () => {
     it('Expect select a key', () => {
       const payload = MockSelect.payload
       S3.select(payload)
@@ -107,7 +107,6 @@ describe('Aws S3 Package Tests', () => {
           expect(response.url.length).to.be.greaterThan(0)
         })
         .catch(err => {
-          console.log('\n\n\n err', err, '\n\n\n')
           expect(err).to.equal(undefined)
         })
     })
@@ -125,7 +124,7 @@ describe('Aws S3 Package Tests', () => {
     })
   })
 
-  describe('DeleteObject test:', () => {
+  describe('DeleteObject test', () => {
     it('Expect delete a key', () => {
       const payload = MockDelete.payload
       S3.deleteObject(payload)
