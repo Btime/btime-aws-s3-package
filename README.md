@@ -4,7 +4,7 @@
 
 ## AWS-S3
 
-This package is an abstraction of the **AWS S3** actions trought [AWS SDK](https://github.com/aws/aws-sdk-js) and [S3-URL-Exists package](https://github.com/Btime/s3-url-exists).
+This package is an abstraction of the **AWS S3** actions throught [AWS SDK](https://github.com/aws/aws-sdk-js) and [S3-URL-Exists package](https://github.com/Btime/s3-url-exists).
 
 The actions available are:
   - **AWS-SDK:**
