@@ -1,6 +1,8 @@
+'use strict'
+
 const Joi = require('joi')
 const _pick = require('lodash').pick
-const { PICK_FIELDS } = require('../fields')
+const { UPLOAD_PICK_FIELDS, KEY_PICK_FIELDS } = require('./fields')
 
 module.exports.validateUpload = function (params) {
   const Schema = {
@@ -21,11 +23,9 @@ module.exports.validateUpload = function (params) {
       .description('the contentType of object to create into AWS S3')
   }
 
-  return Joi.validate(
-    _pick(params, PICK_FIELDS), Schema, {
-      abortEarly: false
-    }
-  )
+  return Joi.validate(_pick(params, UPLOAD_PICK_FIELDS), Schema, {
+    abortEarly: false
+  })
 }
 
 module.exports.validateKey = function (params) {
@@ -35,5 +35,7 @@ module.exports.validateKey = function (params) {
       .description('the key of object to delete/select into AWS S3')
   }
 
-  return Joi.validate(_pick(params, PICK_FIELDS), Schema)
+  return Joi.validate(_pick(params, KEY_PICK_FIELDS), Schema, {
+    abortEarly: false
+  })
 }

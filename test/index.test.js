@@ -9,14 +9,41 @@ const S3UrlExists = require('s3-url-exists')
 
 const MockOptions = require('./mocks/options')
 const S3 = require('..')(MockOptions)
-const MockUpload = require('./mocks/upload')
-const MockSelect = require('./mocks/select')
-const MockDelete = require('./mocks/delete')
+
+/**
+ * @description S3 Object Mocks
+ */
+const MockUploadObject = require('./mocks/object/upload')
+const MockSelectObject = require('./mocks/object/select')
+const MockDeleteObject = require('./mocks/object/delete')
+
+/**
+ * @description S3 Bucket Mocks
+ */
+const MockCreateBucket = require('./mocks/bucket/create')
+const MockDeleteBucket = require('./mocks/bucket/delete')
 
 describe('Aws S3 Package Tests', () => {
-  describe('Upload test', () => {
+  describe('Upload tests', () => {
+    it('Expect not upload an image', async () => {
+      const payload = {}
+
+      try {
+        await S3.upload(payload)
+          .then(response => {
+            expect(response).to.equal(undefined)
+          })
+          .catch(err => {
+            expect(typeof err).to.equal('object')
+            expect(typeof err.message).to.equal('string')
+          })
+      } catch (err) {
+        expect(err).to.equal(undefined)
+      }
+    })
+
     it('Expect to upload an image', async () => {
-      const payload = MockUpload.imageWithContentType
+      const payload = MockUploadObject.imageWithContentType
       const expectedKey = `${payload.key}${payload.fileExtension}`
 
       try {
@@ -52,7 +79,7 @@ describe('Aws S3 Package Tests', () => {
     })
 
     it('Expect to upload an xlsx', async () => {
-      const payload = MockUpload.documentWithContentType
+      const payload = MockUploadObject.documentWithContentType
 
       try {
         await S3.upload(payload)
@@ -84,42 +111,9 @@ describe('Aws S3 Package Tests', () => {
         expect(err).to.equal(undefined)
       }
     })
-
-    it('Expect not upload an image', async () => {
-      const payload = {}
-
-      try {
-        await S3.upload(payload)
-          .then(response => {
-            expect(response).to.equal(undefined)
-          })
-          .catch(err => {
-            expect(typeof err).to.equal('object')
-            expect(typeof err.message).to.equal('string')
-          })
-      } catch (err) {
-        expect(err).to.equal(undefined)
-      }
-    })
   })
 
-  describe('Select test', () => {
-    it('Expect to select a key', () => {
-      const payload = MockSelect.payload
-
-      S3.select(payload)
-        .then(response => {
-          expect(typeof response).to.equal('object')
-          expect(typeof response.status).to.equal('boolean')
-          expect(response.status).to.equal(true)
-          expect(typeof response.url).to.equal('string')
-          expect(response.url.length).to.be.greaterThan(0)
-        })
-        .catch(err => {
-          expect(err).to.equal(undefined)
-        })
-    })
-
+  describe('Select tests', () => {
     it('Expect not select a key', () => {
       const payload = {}
 
@@ -136,11 +130,44 @@ describe('Aws S3 Package Tests', () => {
         expect(err).to.equal(undefined)
       }
     })
+
+    it('Expect to select a key', () => {
+      const payload = MockSelectObject.payload
+
+      S3.select(payload)
+        .then(response => {
+          expect(typeof response).to.equal('object')
+          expect(typeof response.status).to.equal('boolean')
+          expect(response.status).to.equal(true)
+          expect(typeof response.url).to.equal('string')
+          expect(response.url.length).to.be.greaterThan(0)
+        })
+        .catch(err => {
+          expect(err).to.equal(undefined)
+        })
+    })
   })
 
-  describe('DeleteObject test', () => {
+  describe('DeleteObject tests', () => {
+    it('Expect not delete a key', async () => {
+      const payload = {}
+
+      try {
+        await S3.deleteObject(payload)
+          .then(response => {
+            expect(response).to.equal(undefined)
+          })
+          .catch(err => {
+            expect(typeof err).to.equal('object')
+            expect(typeof err.message).to.equal('string')
+          })
+      } catch (err) {
+        expect(err).to.equal(undefined)
+      }
+    })
+
     it('Expect to delete a key', async () => {
-      const payload = MockDelete.payload
+      const payload = MockDeleteObject.payload
 
       try {
         await S3.deleteObject(payload)
@@ -167,18 +194,73 @@ describe('Aws S3 Package Tests', () => {
         expect(err).to.equal(undefined)
       }
     })
+  })
 
-    it('Expect not delete a key', async () => {
-      const payload = {}
+  describe('Create Bucket tests', () => {
+    it('Expect not create bucket cause of invalid name', async () => {
+      const payload = MockCreateBucket.invalidBucketName
 
       try {
-        await S3.deleteObject(payload)
+        await S3.createBucket(payload)
           .then(response => {
             expect(response).to.equal(undefined)
           })
           .catch(err => {
             expect(typeof err).to.equal('object')
-            expect(typeof err.message).to.equal('string')
+            expect(typeof err.name).to.equal('string')
+          })
+      } catch (err) {
+        expect(err).to.equal(undefined)
+      }
+    })
+
+    it('Expect to create bucket', async () => {
+      const payload = MockCreateBucket.valid
+
+      try {
+        await S3.createBucket(payload)
+          .then(response => {
+            expect(typeof response).to.equal('object')
+            expect(typeof response.Location).to.equal('string')
+          })
+          .catch(err => {
+            expect(err).to.equal(undefined)
+          })
+      } catch (err) {
+        expect(err).to.equal(undefined)
+      }
+    })
+  })
+
+  describe('Delete Bucket tests', () => {
+    it('Expect not delete bucket cause of invalid name', async () => {
+      const payload = MockDeleteBucket.invalidBucketName
+
+      try {
+        await S3.deleteBucket(payload)
+          .then(response => {
+            expect(response).to.equal(undefined)
+          })
+          .catch(err => {
+            expect(typeof err).to.equal('object')
+            expect(typeof err.name).to.equal('string')
+          })
+      } catch (err) {
+        expect(err).to.equal(undefined)
+      }
+    })
+
+    it('Expect to delete bucket', async () => {
+      const payload = MockDeleteBucket.valid
+
+      try {
+        await S3.deleteBucket(payload)
+          .then(response => {
+            expect(typeof response).to.equal('object')
+          })
+          .catch(err => {
+            expect(typeof err).to.equal('object')
+            expect(typeof err.name).to.equal('string')
           })
       } catch (err) {
         expect(err).to.equal(undefined)

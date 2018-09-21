@@ -7,18 +7,25 @@
 This package is an abstraction of the **AWS S3** actions trought [AWS SDK](https://github.com/aws/aws-sdk-js) and [S3-URL-Exists package](https://github.com/Btime/s3-url-exists).
 
 The actions available are:
-  - **AWS-SDK:**
+  - **Object:**
     - [`upload `](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property)
+    - [`select`](https://github.com/Btime/s3-url-exists/blob/master/src/index.js#L29)
     - [`deleteObject`](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#deleteObject-property)
 
-  - **S3-URL-Exists:**
-    - [`select`](https://github.com/Btime/s3-url-exists/blob/master/src/index.js#L29)
+  - **Bucket:**
+    - [`createBucket`](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#createBucket-property)
+    - [`deleteBucket`](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#deleteBucket-property)    
 
 ## Table of Contents
 
 1. [Install with NPM](#install-with-npm)
 1. [Usage](#usage)
     1. [Actions](#actions)
+        1. [Upload](#upload)
+        1. [Select](#select)
+        1. [DeleteObject](#deleteObject)
+        1. [CreateBucket](#createBucket)
+        1. [DeleteBucket](#deleteBucket)
 1. [Testing](#testing)
     1. [Setup](#setup)
     1. [Running](#running)
@@ -33,7 +40,7 @@ npm install @btime/aws-s3 --save
 
 When requiring `aws-s3` package, you **must** have your `aws s3 credentials` to use as parameter like example below:
 
-```JS
+```js
 const options = {
   S3_REGION: 's3-region-here',
   S3_KEY_SECRET: 's3-key-secret-here',
@@ -49,9 +56,9 @@ Aws-s3 package returns an `AWS.S3()` instance along with `upload, select, delete
 
 ### Actions
 
-- **Upload:**
+#### Upload
 
-```JS
+```js
 S3.upload(payload)
   .then(response => {
     /* HANDLE RESPONSE */
@@ -63,7 +70,7 @@ S3.upload(payload)
 
 Payload example:
 
-```JS
+```js
 const payload = {
   key: 'optionalKey',
   file: 'requiredBuffer',
@@ -74,7 +81,7 @@ const payload = {
 
 Response example:
 
-```JS
+```js
 {
   ETag: '"123x321XX"',
   Location: 'https://s3-sa-east-1.amazonaws.com/bucket-test/keyExample',
@@ -83,9 +90,9 @@ Response example:
 }
 ```
 
-- **Select:**
+#### Select
 
-```JS
+```js
 const payload = defineSelectPayload(params)
 S3.select(payload)
   .then(response => {
@@ -98,7 +105,7 @@ S3.select(payload)
 
 Payload example:
 
-```JS
+```js
 const payload = {
   key: 'requiredKey'
 }
@@ -106,13 +113,13 @@ const payload = {
 
 Response example:
 
-```JS
+```js
 { status: true, url: 'https://s3-sa-east-1.amazonaws.com/bucket-test/keyExample' }
 ```
 
-- **DeleteObject:**
+#### DeleteObject
 
-```JS
+```js
 const payload = defineDeleteObjectPayload(params)
 S3.deleteObject(payload)
   .then(response => {
@@ -125,7 +132,7 @@ S3.deleteObject(payload)
 
 Payload example:
 
-```JS
+```js
 const payload = {
   key: 'requiredKey'
 }
@@ -133,8 +140,62 @@ const payload = {
 
 Response example:
 
-```JS
+```js
 { Key: 'keyExample' }
+```
+
+#### CreateBucket
+
+```js
+S3.createBucket(payload)
+  .then(response => {
+    /* HANDLE RESPONSE */
+  })
+  .catch(err => {
+    /* HANDLE ERROR */
+  })
+```
+
+Payload example:
+
+```js
+const payload = {
+  name: 'bucket-name-here'
+}
+```
+
+Response example:
+
+```js
+{
+  Location: 'bucket-name-here.s3.amazonaws.com/'
+}
+```
+
+#### DeleteBucket
+
+```js
+S3.deleteBucket(payload)
+  .then(response => {
+    /* HANDLE RESPONSE */
+  })
+  .catch(err => {
+    /* HANDLE ERROR */
+  })
+```
+
+Payload example:
+
+```js
+const payload = {
+  name: 'bucket-name-here'
+}
+```
+
+Response example:
+
+```js
+{}
 ```
 
 ## Testing
