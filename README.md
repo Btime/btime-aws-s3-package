@@ -4,7 +4,24 @@
 
 ## AWS-S3
 
-This package is an abstraction of the **AWS S3** `upload, select` and `deleteObject` actions.
+This package is an abstraction of the **AWS S3** actions trought [AWS SDK](https://github.com/aws/aws-sdk-js) and [S3-URL-Exists package](https://github.com/Btime/s3-url-exists).
+
+The actions available are:
+  - **AWS-SDK:**
+    - [`upload `](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#upload-property)
+    - [`deleteObject`](https://docs.aws.amazon.com/AWSJavaScriptSDK/latest/AWS/S3.html#deleteObject-property)
+
+  - **S3-URL-Exists:**
+    - [`select`](https://github.com/Btime/s3-url-exists/blob/master/src/index.js#L29)
+
+## Table of Contents
+
+1. [Install with NPM](#install-with-npm)
+1. [Usage](#usage)
+    1. [Actions](#actions)
+1. [Testing](#testing)
+    1. [Setup](#setup)
+    1. [Running](#running)
 
 ## Install with npm
 
@@ -26,11 +43,13 @@ const options = {
 const S3 = require('@btime/aws-s3')(options)
 ```
 
-**Note:** this is an example, we **recomend** you get options using `dotenv`, an example can be find in our Testing section.
+**Note:** this is an example, we **recomend** you get options using [`dotenv`](https://github.com/motdotla/dotenv) to set env variables, an example can be find in our Testing section.
 
 Aws-s3 package returns an `AWS.S3()` instance along with `upload, select, deleteObject` functions that are Promisses, you can freely use AWS.S3 instance like you want, but our overwriten functions **should** be used like:
 
-### Upload
+### Actions
+
+- **Upload:**
 
 ```JS
 S3.upload(payload)
@@ -64,7 +83,7 @@ Response example:
 }
 ```
 
-### Select
+- **Select:**
 
 ```JS
 const payload = defineSelectPayload(params)
@@ -91,7 +110,7 @@ Response example:
 { status: true, url: 'https://s3-sa-east-1.amazonaws.com/bucket-test/keyExample' }
 ```
 
-### DeleteObject
+- **DeleteObject:**
 
 ```JS
 const payload = defineDeleteObjectPayload(params)
@@ -122,7 +141,7 @@ Response example:
 
 Tests are coverage by Mocha and Chai, also, all inputs are validate by Joi.
 
-### Running
+### Setup
 
 1. Creating environment file
 
@@ -131,6 +150,8 @@ cp .env.dist .env
 ```
 
 2. Edit environment file with your s3 credentials
+
+### Running
 
 3. Running with npm
 
