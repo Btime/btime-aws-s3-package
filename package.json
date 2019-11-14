@@ -35,7 +35,7 @@
     "aws-sdk": "^2.212.1",
     "joi": "^13.1.2",
     "lodash": "^4.17.5",
-    "s3-url-exists": "github:Btime/s3-url-exists"
+    "s3-url-exists": "github:Btime/s3-url-exists#semver:^1"
   },
   "devDependencies": {
     "dotenv": "^5.0.1",
