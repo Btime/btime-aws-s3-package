@@ -1,6 +1,6 @@
 {
   "name": "@btime/aws-s3",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Aws S3 Package",
   "main": "index.js",
   "scripts": {
