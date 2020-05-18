@@ -1,7 +1,7 @@
 'use strict'
 
-const Joi = require('joi')
-const _pick = require('lodash').pick
+const Joi = require('@hapi/joi')
+const { pick } = require('lodash')
 const { UPLOAD_PICK_FIELDS, KEY_PICK_FIELDS } = require('./fields')
 
 module.exports.validateUpload = function (params) {
@@ -23,7 +23,7 @@ module.exports.validateUpload = function (params) {
       .description('the contentType of object to create into AWS S3')
   }
 
-  return Joi.validate(_pick(params, UPLOAD_PICK_FIELDS), Schema, {
+  return Joi.validate(pick(params, UPLOAD_PICK_FIELDS), Schema, {
     abortEarly: false
   })
 }
@@ -35,7 +35,7 @@ module.exports.validateKey = function (params) {
       .description('the key of object to delete/select into AWS S3')
   }
 
-  return Joi.validate(_pick(params, KEY_PICK_FIELDS), Schema, {
+  return Joi.validate(pick(params, KEY_PICK_FIELDS), Schema, {
     abortEarly: false
   })
 }

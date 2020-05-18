@@ -4,7 +4,7 @@
   "description": "Aws S3 Package",
   "main": "index.js",
   "scripts": {
-    "test": "mocha",
+    "test": "mocha --timeout 50000",
     "coverage": "nyc --reporter=html mocha",
     "fixStyle": "./node_modules/eslint/bin/eslint.js ./ --fix"
   },
@@ -32,10 +32,12 @@
   },
   "homepage": "https://github.com/Btime/btime-aws-s3-package#readme",
   "dependencies": {
+    "@btime/error-messages": "^3.3.0",
+    "@hapi/joi": "^15.0.3",
     "aws-sdk": "^2.212.1",
-    "joi": "^13.1.2",
     "lodash": "^4.17.5",
-    "s3-url-exists": "github:Btime/s3-url-exists#semver:^1"
+    "request": "^2.88.2",
+    "request-promise": "^4.2.5"
   },
   "devDependencies": {
     "dotenv": "^5.0.1",

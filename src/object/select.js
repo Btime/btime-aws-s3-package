@@ -1,8 +1,15 @@
 'use strict'
 
-const S3UrlExists = require('s3-url-exists')
-const { defineS3UrlExistsPayload } = require('./payload')
+const urlExists = require('../url-exists')
 const { validateKey } = require('./validate')
+
+function definePayload (options, params) {
+  return {
+    key: params.key,
+    bucket: options.S3_BUCKET,
+    region: options.S3_REGION
+  }
+}
 
 module.exports.performSelectObject = function (options, params) {
   const isValid = validateKey(params)
@@ -11,11 +18,7 @@ module.exports.performSelectObject = function (options, params) {
     return Promise.reject(isValid.error)
   }
 
-  return new Promise((resolve, reject) => {
-    const payload = defineS3UrlExistsPayload(options, params)
+  const payload = definePayload(options, params)
 
-    return S3UrlExists(payload)
-      .then(result => resolve(result))
-      .catch(err => reject(err))
-  })
+  return urlExists(payload)
 }
