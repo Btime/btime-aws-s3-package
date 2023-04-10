@@ -34,7 +34,7 @@
   "dependencies": {
     "@btime/error-messages": "^3.3.0",
     "@hapi/joi": "^15.0.3",
-    "aws-sdk": "^2.212.1",
+    "aws-sdk": "^2.1354.0",
     "lodash": "^4.17.5",
     "request": "^2.88.2",
     "request-promise": "^4.2.5"
